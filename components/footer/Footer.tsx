@@ -1,14 +1,17 @@
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { FaFacebook, FaInstagram } from "react-icons/fa";
 
+
 const Footer = () => {
+  const t = useTranslations("Footer");
   return (
     <footer className="border-t bg-background">
       <div className="mx-auto w-full max-w-6xl px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <div className="flex items-center gap-3">
-            <Image src="/logo.png" alt="Good boy" width={32} height={32} />
+            <Image src="/logo.png" alt="Good boy" width={30} height={30} />
             <span className="text-base font-semibold">Good boy</span>
           </div>
 
@@ -31,17 +34,14 @@ const Footer = () => {
             </div>
 
             <nav className="flex items-center gap-6 text-sm text-muted-foreground">
-              <Link
-                className="transition hover:text-foreground"
-                href="#contact"
-              >
-                Kontakt
+              <Link className="transition hover:text-foreground" href="#contact">
+                {t("contact")}
               </Link>
               <Link
                 className="transition hover:text-foreground"
                 href="#projects"
               >
-                O projekte
+                {t("about")}
               </Link>
             </nav>
           </div>
