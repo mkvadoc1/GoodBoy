@@ -174,7 +174,7 @@ const StepConfirm = ({
       : undefined) ??
     t("confirm.errorFallback");
   return (
-    <section className="w-full max-w-xl space-y-6">
+    <section className="w-full max-w-xl mx-auto space-y-6">
       <div className="space-y-2">
         <h1 className="text-3xl font-semibold text-foreground">
           {t("confirm.title")}

@@ -55,7 +55,7 @@ const StepChooseType = () => {
     });
 
     return (
-        <section className="w-full max-w-xl py-6 space-y-5">
+        <section className="w-full max-w-xl mx-auto py-6 space-y-5">
             <div className="space-y-2">
                 <h1 className="text-4xl font-bold text-foreground">
                     {t("chooseType.title")}

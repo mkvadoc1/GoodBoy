@@ -17,6 +17,7 @@ import Image from "next/image";
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
+import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 
 type StepPersonalInfoProps = {
   firstName: string;
@@ -137,7 +138,7 @@ const StepPersonalInfo = ({
   const consentMessage =
     fieldErrors.consent?._errors?.[0] ?? tValidation("consentRequired");
   return (
-    <section className="w-full max-w-xl py-6 space-y-6">
+    <section className="w-full max-w-xl mx-auto py-6 space-y-6">
       <div className="space-y-2">
         <h1 className="text-3xl font-semibold text-foreground">
           {t("personalInfo.title")}
@@ -363,20 +364,28 @@ const StepPersonalInfo = ({
                   <Button
                     type="button"
                     variant="ghost"
-                    size="sm"
+                      size="icon-sm"
                     onClick={() => toggleAdditionalContributor(index)}
+                      aria-label={
+                        contributor.isExpanded
+                          ? t("personalInfo.collapseContributor")
+                          : t("personalInfo.expandContributor")
+                      }
                   >
-                    {contributor.isExpanded
-                      ? t("personalInfo.collapseContributor")
-                      : t("personalInfo.expandContributor")}
+                      {contributor.isExpanded ? (
+                        <ChevronUp className="size-4" />
+                      ) : (
+                        <ChevronDown className="size-4" />
+                      )}
                   </Button>
                   <Button
                     type="button"
                     variant="ghost"
-                    size="sm"
+                      size="icon-sm"
                     onClick={() => removeAdditionalContributor(index)}
+                      aria-label={t("personalInfo.removeContributor")}
                   >
-                    {t("personalInfo.removeContributor")}
+                      <Trash2 className="size-4" />
                   </Button>
                 </div>
               </div>
