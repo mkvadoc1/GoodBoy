@@ -81,6 +81,14 @@
             "errorFallback": "Odoslanie sa nepodarilo. Skúste to prosím znova.",
             "checkErrors": "Prosím, skontrolujte povinné údaje a sumu príspevku.",
             "consentError": "Prosím, potvrďte súhlas so spracovaním osobných údajov."
+        },
+        "seo": {
+            "step1Title": "Darovanie – Výber útulku | Good boy",
+            "step1Description": "Vyberte si útulok a sumu príspevku pre nadáciu Good boy.",
+            "step2Title": "Darovanie – Osobné údaje | Good boy",
+            "step2Description": "Zadajte osobné údaje darcu a potrebné kontakty.",
+            "step3Title": "Darovanie – Potvrdenie | Good boy",
+            "step3Description": "Skontrolujte údaje a potvrďte odoslanie príspevku."
         }
     },
     "Validation": {
@@ -95,6 +103,8 @@
     },
     "Contact": {
         "title": "Kontakt",
+        "seoTitle": "Kontakt | Good boy",
+        "seoDescription": "Kontaktujte nadáciu Good boy a náš tím podpory.",
         "emailTitle": "Email",
         "emailDescription": "Náš tím Vám rád pomôže.",
         "emailAddress": "hello@goodrequest.com",
@@ -108,9 +118,15 @@
     },
     "Projects": {
         "title": "O projekte",
+        "seoTitle": "O projekte | Good boy",
+        "seoDescription": "Zistite viac o projekte a dopade nadácie Good boy.",
         "intro": "Nadácia Good Boy sa venuje zlepšovaniu života psov v útulkoch na Slovensku. Zameriava sa na zdravotnú starostlivosť, adopcie, dočasnú starostlivosť, a podporu zodpovedného vlastníctva zvierat prostredníctvom vzdelávania a komunitných programov.",
         "totalContribution": "Celková vyzbieraná hodnota",
         "contributors": "Počet darcov",
         "outro": "Naša práca je možná vďaka podpore jednotlivcov, firiem a komunity. Organizujeme kampaňe, zbierky a aktivity, ktoré pomáhajú útulkom zabezpečiť lepšie podmienky pre zvieratá a zvýšiť šance na adopciu."
+    },
+    "Seo": {
+        "defaultTitle": "Good boy",
+        "defaultDescription": "Good boy pomáha spájať ľudí so psami a podporovať útulky."
     }
 }

@@ -81,6 +81,14 @@
             "errorFallback": "Odeslání se nepodařilo. Zkuste to prosím znovu.",
             "checkErrors": "Prosím, zkontrolujte povinné údaje a částku příspěvku.",
             "consentError": "Prosím, potvrďte souhlas se zpracováním osobních údajů."
+        },
+        "seo": {
+            "step1Title": "Darování – Výběr útulku | Good boy",
+            "step1Description": "Vyberte si útulek a částku příspěvku pro nadaci Good boy.",
+            "step2Title": "Darování – Osobní údaje | Good boy",
+            "step2Description": "Zadejte osobní údaje dárce a potřebné kontakty.",
+            "step3Title": "Darování – Potvrzení | Good boy",
+            "step3Description": "Zkontrolujte údaje a potvrďte odeslání příspěvku."
         }
     },
     "Validation": {
@@ -95,6 +103,8 @@
     },
     "Contact": {
         "title": "Kontakt",
+        "seoTitle": "Kontakt | Good boy",
+        "seoDescription": "Kontaktujte nadaci Good boy a náš tým podpory.",
         "emailTitle": "Email",
         "emailDescription": "Náš tým vám rád pomůže.",
         "emailAddress": "hello@goodrequest.com",
@@ -108,9 +118,15 @@
     },
     "Projects": {
         "title": "O projektu",
+        "seoTitle": "O projektu | Good boy",
+        "seoDescription": "Zjistěte více o projektu a dopadu nadace Good boy.",
         "intro": "Nadace Good Boy se věnuje zlepšování života psů v útulcích na Slovensku. Zaměřuje se na zdravotní péči, adopce, dočasnou péči a podporu zodpovědného vlastnictví zvířat prostřednictvím vzdělávání a komunitních programů.",
         "totalContribution": "Celková vybraná částka",
         "contributors": "Počet dárců",
         "outro": "Naše práce je možná díky podpoře jednotlivců, firem a komunity. Organizujeme kampaně, sbírky a aktivity, které pomáhají útulkům zajistit lepší podmínky pro zvířata a zvýšit šance na adopci."
+    },
+    "Seo": {
+        "defaultTitle": "Good boy",
+        "defaultDescription": "Good boy pomáhá spojovat lidi se psy a podporovat útulky."
     }
 }

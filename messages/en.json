@@ -81,6 +81,14 @@
             "errorFallback": "Submission failed. Please try again.",
             "checkErrors": "Please review required fields and donation amount.",
             "consentError": "Please confirm consent to personal data processing."
+        },
+        "seo": {
+            "step1Title": "Donation – Shelter selection | Good boy",
+            "step1Description": "Choose a shelter and donation amount for Good boy.",
+            "step2Title": "Donation – Personal info | Good boy",
+            "step2Description": "Enter donor details and contact information.",
+            "step3Title": "Donation – Confirmation | Good boy",
+            "step3Description": "Review your details and confirm the donation."
         }
     },
     "Validation": {
@@ -95,6 +103,8 @@
     },
     "Contact": {
         "title": "Contact",
+        "seoTitle": "Contact | Good boy",
+        "seoDescription": "Get in touch with the Good boy foundation and support team.",
         "emailTitle": "Email",
         "emailDescription": "Our friendly team is here to help.",
         "emailAddress": "hello@goodrequest.com",
@@ -108,9 +118,15 @@
     },
     "Projects": {
         "title": "About the project",
+        "seoTitle": "About the project | Good boy",
+        "seoDescription": "Learn more about the project and the impact of Good boy.",
         "intro": "The Good Boy Foundation improves the lives of dogs in shelters in Slovakia. It focuses on healthcare, adoptions, temporary care, and promoting responsible pet ownership through education and community programs.",
         "totalContribution": "Total amount raised",
         "contributors": "Number of donors",
         "outro": "Our work is possible thanks to the support of individuals, companies, and the community. We organize campaigns, fundraisers, and activities that help shelters provide better conditions for animals and increase chances of adoption."
+    },
+    "Seo": {
+        "defaultTitle": "Good boy",
+        "defaultDescription": "Good boy helps connect people with dogs and support shelters."
     }
 }

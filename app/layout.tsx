@@ -5,6 +5,7 @@ import { getLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import LocaleClient from "../components/LocaleClient";
 import QueryProvider from "../components/QueryProvider";
+import { getTranslations } from "next-intl/server";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,10 +17,28 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "GoodBoy",
-  description: "GoodBoy is a tool that helps you to find the best dog for you.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Seo");
+  const title = t("defaultTitle");
+  const description = t("defaultDescription");
+  const image = "/logo.svg";
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [image],
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+      images: [image],
+    },
+  };
+}
 
 export default async function RootLayout({
   children,
