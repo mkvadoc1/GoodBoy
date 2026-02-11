@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Footer from "../components/footer/Footer";
 import { getLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import LocaleClient from "../components/LocaleClient";
+import QueryProvider from "../components/QueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,13 +35,7 @@ export default async function RootLayout({
       >
         <NextIntlClientProvider messages={messages}>
           <LocaleClient />
-          <div className="mx-auto max-w-6xl flex flex-col h-screen px-4 sm:px-6 lg:px-8">
-            {/* navbar */}
-            <div className="grow flex items-center justify-center">
-              {children}
-            </div>
-            <Footer />
-          </div>
+          <QueryProvider>{children}</QueryProvider>
         </NextIntlClientProvider>
       </body>
     </html>

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 48" role="img" aria-label="Czechia flag">
+  <rect width="64" height="24" fill="#ffffff"/>
+  <rect width="64" height="24" y="24" fill="#d7141a"/>
+  <polygon points="0,0 28,24 0,48" fill="#11457e"/>
+</svg>
