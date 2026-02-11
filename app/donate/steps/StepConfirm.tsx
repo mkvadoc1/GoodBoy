@@ -1,6 +1,6 @@
 "use client";
 
-import { useShelters, useSheltersResults } from "@/lib/queries";
+import { useShelters } from "@/lib/queries";
 import { useContribute } from "@/lib/queries";
 import { useDonationStore } from "@/lib/donationStore";
 import { useCallback, useEffect, useRef } from "react";
@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { FaCircleCheck, FaCircleExclamation } from "react-icons/fa6";
 import type { ApiError, ContributeResponse } from "@/lib/api";
+import { donationConfirmSchema } from "@/lib/validation";
 
 type StepConfirmProps = {
   donationType: "specific" | "foundation";
@@ -32,23 +33,21 @@ const StepConfirm = ({
   phoneCountry,
   consent,
 }: StepConfirmProps) => {
-  const { data } = useSheltersResults();
   const { data: sheltersData } = useShelters();
   const contributeMutation = useContribute();
   const { setStepValid, showErrors, setShowErrors, setSubmitAction } = useDonationStore();
 
   const value = Number(amount || 0);
-  const emailValid = /\S+@\S+\.\S+/.test(email);
-  const phoneDigits = phone.replace(/\D/g, "");
-  const phoneValid = phoneDigits.length === 9;
-  const canSubmit = Boolean(
-    lastName.trim().length >= 2 &&
-      lastName.trim().length <= 30 &&
-      emailValid &&
-      phoneValid &&
-      consent &&
-      value > 0
-  );
+  const validation = donationConfirmSchema.safeParse({
+    firstName,
+    lastName,
+    email,
+    phone,
+    phoneCountry,
+    consent,
+    amount,
+  });
+  const canSubmit = validation.success;
 
   const handleSubmit = useCallback(() => {
     if (!canSubmit) {

@@ -7,9 +7,11 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 import { useDonationStore } from "@/lib/donationStore";
+import { personalInfoSchema } from "@/lib/validation";
+import type { ZodFormattedError } from "zod";
+import type { PersonalInfoInput } from "@/lib/validation";
 import Image from "next/image";
 import { useEffect } from "react";
 
@@ -43,17 +45,18 @@ const StepPersonalInfo = ({
   onConsentChange,
 }: StepPersonalInfoProps) => {
   const { setStepValid, showErrors, setShowErrors } = useDonationStore();
-  const emailValid = /\S+@\S+\.\S+/.test(email);
-  const firstNameValid =
-    firstName.trim().length === 0 ||
-    (firstName.trim().length >= 2 && firstName.trim().length <= 20);
-  const lastNameValid =
-    lastName.trim().length >= 2 && lastName.trim().length <= 30;
-  const phoneDigits = phone.replace(/\D/g, "");
-  const phoneValid = phoneDigits.length === 9;
-  const canProceed = Boolean(
-    firstNameValid && lastNameValid && emailValid && phoneValid && consent
-  );
+  const validation = personalInfoSchema.safeParse({
+    firstName,
+    lastName,
+    email,
+    phone,
+    phoneCountry,
+    consent,
+  });
+  const fieldErrors: ZodFormattedError<PersonalInfoInput> = validation.success
+    ? ({ _errors: [] } as ZodFormattedError<PersonalInfoInput>)
+    : validation.error.format();
+  const canProceed = validation.success;
 
   useEffect(() => {
     setStepValid(canProceed);
@@ -76,11 +79,11 @@ const StepPersonalInfo = ({
     "+420": { flagSrc: "/flags/cz.svg", flagAlt: "Czechia", label: "+420" },
   };
   const selectedPhoneCountry = phoneCountryMeta[phoneCountry];
-  const phoneInvalid = !phoneValid && showErrors;
-  const emailInvalid = !emailValid && showErrors;
-  const lastNameInvalid = !lastNameValid && showErrors;
-  const firstNameInvalid = !firstNameValid && showErrors;
-  const consentInvalid = !consent && showErrors;
+  const phoneInvalid = Boolean(fieldErrors.phone?._errors?.length) && showErrors;
+  const emailInvalid = Boolean(fieldErrors.email?._errors?.length) && showErrors;
+  const lastNameInvalid = Boolean(fieldErrors.lastName?._errors?.length) && showErrors;
+  const firstNameInvalid = Boolean(fieldErrors.firstName?._errors?.length) && showErrors;
+  const consentInvalid = Boolean(fieldErrors.consent?._errors?.length) && showErrors;
   return (
     <section className="w-full max-w-xl py-6 space-y-6">
       <div className="space-y-2">
@@ -159,7 +162,7 @@ const StepPersonalInfo = ({
                 position="popper"
                 sideOffset={8}
                 align="start"
-                className="min-w-[var(--radix-select-trigger-width)] max-w-[var(--radix-select-trigger-width)]"
+                className="min-w-(--radix-select-trigger-width) max-w-(--radix-select-trigger-width)"
                 style={{ width: "var(--radix-select-trigger-width)" }}
               >
                 <SelectItem value="+421">
