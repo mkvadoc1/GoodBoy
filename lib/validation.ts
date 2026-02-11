@@ -20,38 +20,32 @@ export type PersonalInfoInput = {
   consent: boolean;
 };
 
+export type ContributorInput = Omit<PersonalInfoInput, "consent"> & {
+  consent: boolean;
+};
+
 export type DonationConfirmInput = PersonalInfoInput & {
   amount: number;
 };
 
 export const phoneCountrySchema = z.enum(["+421", "+420"]);
 
-export const createPersonalInfoSchema = (messages: ValidationMessages) =>
+export const createContributorSchema = (messages: ValidationMessages) =>
   z.object({
     firstName: z
       .string()
       .trim()
-      .refine(
-        (value) => value.length === 0 || /^[\p{L}\s-]+$/u.test(value),
-        {
-          message: messages.firstNameLettersOnly,
-        }
-      )
-      .refine(
-        (value) => value.length === 0 || (value.length >= 2 && value.length <= 20),
-        {
-          message: messages.firstNameInvalid,
-        }
-      ),
+      .refine((value) => /^[\p{L}\s-]+$/u.test(value), {
+        message: messages.firstNameLettersOnly,
+      })
+      .min(2, { message: messages.firstNameInvalid })
+      .max(20, { message: messages.firstNameInvalid }),
     lastName: z
       .string()
       .trim()
-      .refine(
-        (value) => /^[\p{L}\s-]+$/u.test(value),
-        {
-          message: messages.lastNameLettersOnly,
-        }
-      )
+      .refine((value) => /^[\p{L}\s-]+$/u.test(value), {
+        message: messages.lastNameLettersOnly,
+      })
       .min(2, { message: messages.lastNameInvalid })
       .max(30, { message: messages.lastNameInvalid }),
     email: z.string().trim().email({ message: messages.emailInvalid }),
@@ -66,6 +60,9 @@ export const createPersonalInfoSchema = (messages: ValidationMessages) =>
       message: messages.consentRequired,
     }),
   });
+
+export const createPersonalInfoSchema = (messages: ValidationMessages) =>
+  createContributorSchema(messages);
 
 export const createDonationConfirmSchema = (messages: ValidationMessages) =>
   createPersonalInfoSchema(messages).extend({

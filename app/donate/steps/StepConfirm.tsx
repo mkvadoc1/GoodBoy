@@ -3,14 +3,14 @@
 import { useShelters } from "@/lib/queries";
 import { useContribute } from "@/lib/queries";
 import { useDonationStore } from "@/lib/donationStore";
-import { useCallback, useEffect, useRef } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { FaCircleCheck, FaCircleExclamation } from "react-icons/fa6";
 import type { ApiError, ContributeResponse } from "@/lib/api";
-import { createDonationConfirmSchema } from "@/lib/validation";
+import { createContributorSchema, createDonationConfirmSchema } from "@/lib/validation";
 import type { ValidationMessages } from "@/lib/validation";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 
 type StepConfirmProps = {
   donationType: "specific" | "foundation";
@@ -39,7 +39,14 @@ const StepConfirm = ({
   const tValidation = useTranslations("Validation");
   const { data: sheltersData } = useShelters();
   const contributeMutation = useContribute();
-  const { setStepValid, showErrors, setShowErrors, setSubmitAction } = useDonationStore();
+  const {
+    setStepValid,
+    showErrors,
+    setShowErrors,
+    setSubmitAction,
+    setSubmitSuccess,
+    additionalContributors,
+  } = useDonationStore();
 
   const value = Number(amount || 0);
   const validationMessages: ValidationMessages = {
@@ -61,25 +68,47 @@ const StepConfirm = ({
     consent,
     amount,
   });
-  const canSubmit = validation.success;
+  const contributorSchema = createContributorSchema(validationMessages);
+  const additionalValidations = additionalContributors.map((contributor) =>
+    contributorSchema.safeParse(contributor)
+  );
+  const additionalValid = additionalValidations.every((result) => result.success);
+  const canSubmit = validation.success && additionalValid;
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = useCallback(async () => {
     if (!canSubmit) {
       setShowErrors(true);
       return;
     }
-    contributeMutation.mutate({
-      contributors: [
-        {
-          firstName: firstName || undefined,
-          lastName: lastName.trim(),
-          email: email.trim(),
-          phone: phone ? `${phoneCountry} ${phone}` : null,
-        },
-      ],
-      shelterID: donationType === "specific" ? shelterId ?? null : null,
-      value,
-    });
+    setSubmitSuccess(false);
+    const contributorsToSend = [
+      {
+        firstName: firstName || undefined,
+        lastName: lastName.trim(),
+        email: email.trim(),
+        phone: phone ? `${phoneCountry} ${phone}` : null,
+      },
+      ...additionalContributors.map((contributor) => ({
+        firstName: contributor.firstName ? contributor.firstName.trim() : undefined,
+        lastName: contributor.lastName.trim(),
+        email: contributor.email.trim(),
+        phone: contributor.phone
+          ? `${contributor.phoneCountry} ${contributor.phone}`
+          : null,
+      })),
+    ];
+
+    try {
+      for (const contributor of contributorsToSend) {
+        await contributeMutation.mutateAsync({
+          contributors: [contributor],
+          shelterID: donationType === "specific" ? shelterId ?? null : null,
+          value,
+        });
+      }
+    } catch {
+      return;
+    }
   }, [
     canSubmit,
     contributeMutation,
@@ -92,6 +121,8 @@ const StepConfirm = ({
     shelterId,
     value,
     setShowErrors,
+    additionalContributors,
+    setSubmitSuccess,
   ]);
 
   const submitRef = useRef<() => void>(() => {});
@@ -111,6 +142,13 @@ const StepConfirm = ({
   }, [canSubmit, setStepValid, setShowErrors, showErrors]);
   const shelterName = sheltersData?.shelters.find((s) => s.id === shelterId)?.name;
   const fullName = [firstName, lastName].filter(Boolean).join(" ").trim();
+  const additionalFullNames = additionalContributors.map((contributor) =>
+    [contributor.firstName, contributor.lastName].filter(Boolean).join(" ").trim()
+  );
+  const [expandedAdditional, setExpandedAdditional] = useState<Record<number, boolean>>({});
+  const toggleAdditionalDetails = (index: number) => {
+    setExpandedAdditional((prev) => ({ ...prev, [index]: !prev[index] }));
+  };
   const responseMessages = contributeMutation.data?.messages ?? [];
   const responseErrorMessages = responseMessages.filter((message) => message.type === "ERROR");
   const responseSuccessMessages = responseMessages.filter(
@@ -120,6 +158,9 @@ const StepConfirm = ({
   const apiErrorMessages = apiError?.data?.messages ?? [];
   const showSuccess = contributeMutation.isSuccess && responseErrorMessages.length === 0;
   const showError = contributeMutation.isError || responseErrorMessages.length > 0;
+  useEffect(() => {
+    setSubmitSuccess(showSuccess);
+  }, [setSubmitSuccess, showSuccess]);
   const successMessage =
     responseSuccessMessages[0]?.message ??
     responseMessages[0]?.message ??
@@ -197,14 +238,59 @@ const StepConfirm = ({
               {phone ? `${phoneCountry} ${phone}` : "-"}
             </span>
           </div>
+          {additionalContributors.length > 0 && (
+            <div className="space-y-2 pt-2">
+              <p className="text-xs font-semibold text-muted-foreground">
+                {t("confirm.additionalContributors")}
+              </p>
+              {additionalContributors.map((contributor, index) => (
+                <div key={`additional-${index}`} className="space-y-1">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <span>
+                      {t("confirm.additionalLabel", { index: index + 1 })}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-foreground">
+                        {additionalFullNames[index] || "-"}
+                      </span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="xs"
+                        onClick={() => toggleAdditionalDetails(index)}
+                      >
+                        {expandedAdditional[index]
+                          ? t("confirm.collapseDetails")
+                          : t("confirm.expandDetails")}
+                      </Button>
+                    </div>
+                  </div>
+                  {expandedAdditional[index] && (
+                    <div className="space-y-1 text-xs text-muted-foreground">
+                      <div className="flex items-center justify-between">
+                        <span>{t("confirm.emailLabel")}</span>
+                        <span className="text-foreground">
+                          {contributor.email || "-"}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>{t("confirm.phoneLabel")}</span>
+                        <span className="text-foreground">
+                          {contributor.phone
+                            ? `${contributor.phoneCountry} ${contributor.phone}`
+                            : "-"}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="border-t border-border" />
 
-        <label className="flex items-center gap-3 text-xs text-muted-foreground">
-          <Checkbox checked={consent} />
-          <span>{t("confirm.consent")}</span>
-        </label>
         {showSuccess && (
           <Alert className="border-emerald-200 bg-emerald-50/60 text-emerald-700">
             <AlertTitle className="flex items-center gap-2 text-emerald-800">
@@ -232,11 +318,6 @@ const StepConfirm = ({
       {showErrors && !canSubmit && (
         <p className="text-sm text-red-600">
           {t("confirm.checkErrors")}
-        </p>
-      )}
-      {showErrors && !consent && (
-        <p className="text-sm text-red-600">
-          {t("confirm.consentError")}
         </p>
       )}
     </section>
