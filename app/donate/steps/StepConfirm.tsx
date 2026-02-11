@@ -8,7 +8,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { FaCircleCheck, FaCircleExclamation } from "react-icons/fa6";
 import type { ApiError, ContributeResponse } from "@/lib/api";
-import { donationConfirmSchema } from "@/lib/validation";
+import { createDonationConfirmSchema } from "@/lib/validation";
+import type { ValidationMessages } from "@/lib/validation";
+import { useTranslations } from "next-intl";
 
 type StepConfirmProps = {
   donationType: "specific" | "foundation";
@@ -33,12 +35,24 @@ const StepConfirm = ({
   phoneCountry,
   consent,
 }: StepConfirmProps) => {
+  const t = useTranslations("Donate");
+  const tValidation = useTranslations("Validation");
   const { data: sheltersData } = useShelters();
   const contributeMutation = useContribute();
   const { setStepValid, showErrors, setShowErrors, setSubmitAction } = useDonationStore();
 
   const value = Number(amount || 0);
-  const validation = donationConfirmSchema.safeParse({
+  const validationMessages: ValidationMessages = {
+    firstNameInvalid: tValidation("firstNameInvalid"),
+    firstNameLettersOnly: tValidation("firstNameLettersOnly"),
+    lastNameInvalid: tValidation("lastNameInvalid"),
+    lastNameLettersOnly: tValidation("lastNameLettersOnly"),
+    emailInvalid: tValidation("emailInvalid"),
+    phoneInvalid: tValidation("phoneInvalid"),
+    consentRequired: tValidation("consentRequired"),
+    amountRequired: tValidation("amountRequired"),
+  };
+  const validation = createDonationConfirmSchema(validationMessages).safeParse({
     firstName,
     lastName,
     email,
@@ -109,7 +123,7 @@ const StepConfirm = ({
   const successMessage =
     responseSuccessMessages[0]?.message ??
     responseMessages[0]?.message ??
-    "Príspevok bol úspešne odoslaný.";
+    t("confirm.successFallback");
   const errorMessage =
     responseErrorMessages[0]?.message ??
     apiErrorMessages.find((message) => message.type === "ERROR")?.message ??
@@ -117,18 +131,18 @@ const StepConfirm = ({
     contributeMutation.error?.message !== "Failed to fetch"
       ? contributeMutation.error?.message
       : undefined) ??
-    "Odoslanie sa nepodarilo. Skúste to prosím znova.";
+    t("confirm.errorFallback");
   return (
     <section className="w-full max-w-xl space-y-6">
       <div className="space-y-2">
         <h1 className="text-3xl font-semibold text-foreground">
-          Skontrolujte si zadané údaje
+          {t("confirm.title")}
         </h1>
         {showErrors && !canSubmit && (
           <Alert variant="destructive">
-            <AlertTitle>Formulár nie je kompletný</AlertTitle>
+            <AlertTitle>{t("confirm.incompleteTitle")}</AlertTitle>
             <AlertDescription>
-              Skontrolujte priezvisko, e-mail, telefón, súhlas a sumu príspevku.
+              {t("confirm.incompleteDescription")}
             </AlertDescription>
           </Alert>
         )}
@@ -136,24 +150,28 @@ const StepConfirm = ({
 
       <div className="space-y-6 text-sm">
         <div className="space-y-3">
-          <p className="text-xs font-semibold text-muted-foreground">Zhrnutie</p>
+          <p className="text-xs font-semibold text-muted-foreground">
+            {t("confirm.summary")}
+          </p>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Forma pomoci</span>
+              <span className="text-muted-foreground">
+                {t("confirm.helpType")}
+              </span>
               <span className="font-medium">
                 {donationType === "foundation"
-                  ? "Finančný príspevok celej nadácii"
-                  : "Finančný príspevok konkrétnemu útulku"}
+                  ? t("confirm.helpTypeFoundation")
+                  : t("confirm.helpTypeSpecific")}
               </span>
             </div>
             {donationType === "specific" && (
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Útulok</span>
+                <span className="text-muted-foreground">{t("confirm.shelter")}</span>
                 <span className="font-medium">{shelterName ?? "-"}</span>
               </div>
             )}
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Suma príspevku</span>
+              <span className="text-muted-foreground">{t("confirm.amount")}</span>
               <span className="font-medium">{value} €</span>
             </div>
           </div>
@@ -162,17 +180,19 @@ const StepConfirm = ({
         <div className="border-t border-border" />
 
         <div className="space-y-3">
-          <p className="text-xs font-semibold text-muted-foreground">Meno a priezvisko</p>
+          <p className="text-xs font-semibold text-muted-foreground">
+            {t("confirm.personalTitle")}
+          </p>
           <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">Meno a priezvisko</span>
+            <span className="text-muted-foreground">{t("confirm.nameLabel")}</span>
             <span className="font-medium">{fullName || "-"}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">E-mail</span>
+            <span className="text-muted-foreground">{t("confirm.emailLabel")}</span>
             <span className="font-medium">{email || "-"}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">Telefónne číslo</span>
+            <span className="text-muted-foreground">{t("confirm.phoneLabel")}</span>
             <span className="font-medium">
               {phone ? `${phoneCountry} ${phone}` : "-"}
             </span>
@@ -183,13 +203,13 @@ const StepConfirm = ({
 
         <label className="flex items-center gap-3 text-xs text-muted-foreground">
           <Checkbox checked={consent} />
-          <span>Súhlasím so spracovaním mojich osobných údajov</span>
+          <span>{t("confirm.consent")}</span>
         </label>
         {showSuccess && (
           <Alert className="border-emerald-200 bg-emerald-50/60 text-emerald-700">
             <AlertTitle className="flex items-center gap-2 text-emerald-800">
               <FaCircleCheck className="size-4" />
-              Ďakujeme!
+              {t("confirm.successTitle")}
             </AlertTitle>
             <AlertDescription className="text-emerald-700">
               {successMessage}
@@ -200,7 +220,7 @@ const StepConfirm = ({
           <Alert className="border-rose-200 bg-rose-50/70 text-rose-700">
             <AlertTitle className="flex items-center gap-2 text-rose-800">
               <FaCircleExclamation className="size-4" />
-              Odoslanie zlyhalo
+              {t("confirm.errorTitle")}
             </AlertTitle>
             <AlertDescription className="text-rose-700">
               {errorMessage}
@@ -211,12 +231,12 @@ const StepConfirm = ({
 
       {showErrors && !canSubmit && (
         <p className="text-sm text-red-600">
-          Prosím, skontrolujte povinné údaje a sumu príspevku.
+          {t("confirm.checkErrors")}
         </p>
       )}
       {showErrors && !consent && (
         <p className="text-sm text-red-600">
-          Prosím, potvrďte súhlas so spracovaním osobných údajov.
+          {t("confirm.consentError")}
         </p>
       )}
     </section>

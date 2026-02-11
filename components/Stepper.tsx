@@ -1,9 +1,16 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
-
-const steps = ["Výber útulku", "Osobné údaje", "Potvrdenie"];
+import { useTranslations } from "next-intl";
 
 const Stepper = ({ currentStep = 0 }: { currentStep: number }) => {
+  const t = useTranslations("Donate");
+  const steps = [
+    t("stepper.chooseShelter"),
+    t("stepper.personalInfo"),
+    t("stepper.confirm"),
+  ];
   return (
     <div className="flex flex-wrap items-center py-6 gap-4 text-sm text-muted-foreground">
       {steps.map((label, index) => {

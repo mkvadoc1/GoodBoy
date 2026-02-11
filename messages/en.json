@@ -1,6 +1,104 @@
 {
-    "Footer":{
+    "Common": {
+        "back": "Back"
+    },
+    "Footer": {
         "about": "About Us",
-        "contact": "Contact"
+        "contact": "Contact",
+        "brand": "Good boy",
+        "brandAlt": "Good boy logo",
+        "facebookLabel": "Facebook",
+        "instagramLabel": "Instagram"
+    },
+    "Donate": {
+        "stepper": {
+            "chooseShelter": "Shelter selection",
+            "personalInfo": "Personal info",
+            "confirm": "Confirmation"
+        },
+        "navigation": {
+            "back": "Back",
+            "next": "Continue",
+            "submit": "Submit form"
+        },
+        "chooseType": {
+            "title": "Choose how you want to help",
+            "specific": "Donate to a specific shelter",
+            "foundation": "Donate to the foundation",
+            "aboutProject": "About the project",
+            "shelterRequired": "Shelter (required)",
+            "shelterOptional": "Shelter (optional)",
+            "shelterPlaceholder": "Select a shelter from the list",
+            "loading": "Loading...",
+            "amountTitle": "Amount I want to donate",
+            "amountError": "Please enter an amount greater than 0 €.",
+            "shelterError": "Please select a shelter."
+        },
+        "personalInfo": {
+            "title": "We need a few details from you",
+            "firstName": "First name",
+            "firstNamePlaceholder": "Enter your first name",
+            "lastName": "Last name",
+            "lastNamePlaceholder": "Enter your last name",
+            "email": "Email",
+            "emailPlaceholder": "Enter your email",
+            "phone": "Phone number",
+            "phonePlaceholder": "Enter number",
+            "consent": "I agree to the processing of my personal data under the foundation's terms.",
+            "countrySkAlt": "Slovakia",
+            "countryCzAlt": "Czechia"
+        },
+        "confirm": {
+            "title": "Review your details",
+            "incompleteTitle": "Form is incomplete",
+            "incompleteDescription": "Check last name, email, phone, consent, and donation amount.",
+            "summary": "Summary",
+            "helpType": "Type of help",
+            "helpTypeFoundation": "Financial contribution to the whole foundation",
+            "helpTypeSpecific": "Financial contribution to a specific shelter",
+            "shelter": "Shelter",
+            "amount": "Donation amount",
+            "personalTitle": "Name and surname",
+            "nameLabel": "Name and surname",
+            "emailLabel": "Email",
+            "phoneLabel": "Phone number",
+            "consent": "I agree to the processing of my personal data",
+            "successTitle": "Thank you!",
+            "errorTitle": "Submission failed",
+            "successFallback": "Your donation was sent successfully.",
+            "errorFallback": "Submission failed. Please try again.",
+            "checkErrors": "Please review required fields and donation amount.",
+            "consentError": "Please confirm consent to personal data processing."
+        }
+    },
+    "Validation": {
+        "firstNameInvalid": "First name must be 2–20 characters or left empty.",
+        "firstNameLettersOnly": "First name can contain letters only.",
+        "lastNameInvalid": "Last name must be 2–30 characters.",
+        "lastNameLettersOnly": "Last name can contain letters only.",
+        "emailInvalid": "Please enter a valid email.",
+        "phoneInvalid": "Phone number must have 9 digits.",
+        "consentRequired": "Please confirm consent to data processing.",
+        "amountRequired": "Enter a donation amount."
+    },
+    "Contact": {
+        "title": "Contact",
+        "emailTitle": "Email",
+        "emailDescription": "Our friendly team is here to help.",
+        "emailAddress": "hello@goodrequest.com",
+        "officeTitle": "Office",
+        "officeDescription": "Come say hello at our office HQ.",
+        "officeAddress": "Obchodná 3D, 010 08 Žilina, Slovakia",
+        "phoneTitle": "Phone",
+        "phoneDescription": "Mon–Fri from 8am to 5pm.",
+        "phoneNumber": "+421 911 750 750",
+        "imageAlt": "Contact dog"
+    },
+    "Projects": {
+        "title": "About the project",
+        "intro": "The Good Boy Foundation improves the lives of dogs in shelters in Slovakia. It focuses on healthcare, adoptions, temporary care, and promoting responsible pet ownership through education and community programs.",
+        "totalContribution": "Total amount raised",
+        "contributors": "Number of donors",
+        "outro": "Our work is possible thanks to the support of individuals, companies, and the community. We organize campaigns, fundraisers, and activities that help shelters provide better conditions for animals and increase chances of adoption."
     }
 }

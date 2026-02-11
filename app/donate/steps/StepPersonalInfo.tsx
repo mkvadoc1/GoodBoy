@@ -9,11 +9,13 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { useDonationStore } from "@/lib/donationStore";
-import { personalInfoSchema } from "@/lib/validation";
+import { createPersonalInfoSchema } from "@/lib/validation";
+import type { ValidationMessages } from "@/lib/validation";
 import type { ZodFormattedError } from "zod";
 import type { PersonalInfoInput } from "@/lib/validation";
 import Image from "next/image";
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 type StepPersonalInfoProps = {
   firstName: string;
@@ -44,8 +46,20 @@ const StepPersonalInfo = ({
   onPhoneCountryChange,
   onConsentChange,
 }: StepPersonalInfoProps) => {
+  const t = useTranslations("Donate");
+  const tValidation = useTranslations("Validation");
   const { setStepValid, showErrors, setShowErrors } = useDonationStore();
-  const validation = personalInfoSchema.safeParse({
+  const validationMessages: ValidationMessages = {
+    firstNameInvalid: tValidation("firstNameInvalid"),
+    firstNameLettersOnly: tValidation("firstNameLettersOnly"),
+    lastNameInvalid: tValidation("lastNameInvalid"),
+    lastNameLettersOnly: tValidation("lastNameLettersOnly"),
+    emailInvalid: tValidation("emailInvalid"),
+    phoneInvalid: tValidation("phoneInvalid"),
+    consentRequired: tValidation("consentRequired"),
+    amountRequired: tValidation("amountRequired"),
+  };
+  const validation = createPersonalInfoSchema(validationMessages).safeParse({
     firstName,
     lastName,
     email,
@@ -75,8 +89,16 @@ const StepPersonalInfo = ({
     "+421" | "+420",
     { flagSrc: string; flagAlt: string; label: string }
   > = {
-    "+421": { flagSrc: "/flags/sk.svg", flagAlt: "Slovakia", label: "+421" },
-    "+420": { flagSrc: "/flags/cz.svg", flagAlt: "Czechia", label: "+420" },
+    "+421": {
+      flagSrc: "/flags/sk.svg",
+      flagAlt: t("personalInfo.countrySkAlt"),
+      label: "+421",
+    },
+    "+420": {
+      flagSrc: "/flags/cz.svg",
+      flagAlt: t("personalInfo.countryCzAlt"),
+      label: "+420",
+    },
   };
   const selectedPhoneCountry = phoneCountryMeta[phoneCountry];
   const phoneInvalid = Boolean(fieldErrors.phone?._errors?.length) && showErrors;
@@ -84,58 +106,74 @@ const StepPersonalInfo = ({
   const lastNameInvalid = Boolean(fieldErrors.lastName?._errors?.length) && showErrors;
   const firstNameInvalid = Boolean(fieldErrors.firstName?._errors?.length) && showErrors;
   const consentInvalid = Boolean(fieldErrors.consent?._errors?.length) && showErrors;
+  const firstNameMessage =
+    fieldErrors.firstName?._errors?.[0] ?? tValidation("firstNameInvalid");
+  const lastNameMessage =
+    fieldErrors.lastName?._errors?.[0] ?? tValidation("lastNameInvalid");
+  const emailMessage =
+    fieldErrors.email?._errors?.[0] ?? tValidation("emailInvalid");
+  const phoneMessage =
+    fieldErrors.phone?._errors?.[0] ?? tValidation("phoneInvalid");
+  const consentMessage =
+    fieldErrors.consent?._errors?.[0] ?? tValidation("consentRequired");
   return (
     <section className="w-full max-w-xl py-6 space-y-6">
       <div className="space-y-2">
         <h1 className="text-3xl font-semibold text-foreground">
-          Potrebujeme od Vás zopár informácií
+          {t("personalInfo.title")}
         </h1>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <label className={labelClass(firstNameInvalid)}>Meno</label>
+          <label className={labelClass(firstNameInvalid)}>
+            {t("personalInfo.firstName")}
+          </label>
           <Input
             type="text"
-            placeholder="Zadajte Vaše meno"
+            placeholder={t("personalInfo.firstNamePlaceholder")}
             value={firstName}
             onChange={(event) => onFirstNameChange(event.target.value)}
             className={inputClass(firstNameInvalid)}
           />
           {firstNameInvalid && (
-            <p className={errorTextClass}>
-              Meno musí mať 2–20 znakov alebo zostať prázdne.
-            </p>
+            <p className={errorTextClass}>{firstNameMessage}</p>
           )}
         </div>
         <div className="space-y-2">
-          <label className={labelClass(lastNameInvalid)}>Priezvisko</label>
+          <label className={labelClass(lastNameInvalid)}>
+            {t("personalInfo.lastName")}
+          </label>
           <Input
             type="text"
-            placeholder="Zadajte Vaše priezvisko"
+            placeholder={t("personalInfo.lastNamePlaceholder")}
             value={lastName}
             onChange={(event) => onLastNameChange(event.target.value)}
             className={inputClass(lastNameInvalid)}
           />
           {lastNameInvalid && (
-            <p className={errorTextClass}>Priezvisko musí mať 2–30 znakov.</p>
+            <p className={errorTextClass}>{lastNameMessage}</p>
           )}
         </div>
         <div className="space-y-2 sm:col-span-2">
-          <label className={labelClass(emailInvalid)}>E-mail</label>
+          <label className={labelClass(emailInvalid)}>
+            {t("personalInfo.email")}
+          </label>
           <Input
             type="email"
-            placeholder="Zadajte Váš e-mail"
+            placeholder={t("personalInfo.emailPlaceholder")}
             value={email}
             onChange={(event) => onEmailChange(event.target.value)}
             className={inputClass(emailInvalid)}
           />
           {emailInvalid && (
-            <p className={errorTextClass}>Prosím, zadajte platný e-mail.</p>
+            <p className={errorTextClass}>{emailMessage}</p>
           )}
         </div>
         <div className="space-y-2 sm:col-span-2">
-          <label className={labelClass(phoneInvalid)}>Telefónne číslo</label>
+          <label className={labelClass(phoneInvalid)}>
+            {t("personalInfo.phone")}
+          </label>
           <div className="flex gap-2">
             <Select
               value={phoneCountry}
@@ -198,7 +236,7 @@ const StepPersonalInfo = ({
               </span>
               <Input
                 type="tel"
-                placeholder="Zadajte číslo"
+                placeholder={t("personalInfo.phonePlaceholder")}
                 value={phone}
                 onChange={(event) => onPhoneChange(event.target.value)}
                 className={`${inputClass(phoneInvalid).replace("w-full", "w-full")} pl-14`}
@@ -206,7 +244,7 @@ const StepPersonalInfo = ({
             </div>
           </div>
           {phoneInvalid && (
-            <p className={errorTextClass}>Telefónne číslo musí mať 9 číslic.</p>
+            <p className={errorTextClass}>{phoneMessage}</p>
           )}
         </div>
       </div>
@@ -222,13 +260,11 @@ const StepPersonalInfo = ({
           onCheckedChange={(value) => onConsentChange(Boolean(value))}
         />
         <span>
-          Súhlasím so spracovaním osobných údajov podľa podmienok nadácie.
+          {t("personalInfo.consent")}
         </span>
       </label>
       {consentInvalid && (
-        <p className={errorTextClass}>
-          Prosím, potvrďte súhlas so spracovaním údajov.
-        </p>
+        <p className={errorTextClass}>{consentMessage}</p>
       )}
 
       

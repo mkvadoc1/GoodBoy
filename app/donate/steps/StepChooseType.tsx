@@ -17,10 +17,12 @@ import { useDonationStore } from "@/lib/donationStore";
 import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { AlertTriangle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const presetAmounts = [5, 10, 20, 30, 50, 100];
 
 const StepChooseType = () => {
+    const t = useTranslations("Donate");
     const { data, isLoading } = useShelters();
     const {
         donationType,
@@ -56,7 +58,7 @@ const StepChooseType = () => {
         <section className="w-full max-w-xl py-6 space-y-5">
             <div className="space-y-2">
                 <h1 className="text-4xl font-bold text-foreground">
-                    Vyberte si možnosť, ako chcete pomôcť
+                    {t("chooseType.title")}
                 </h1>
             </div>
 
@@ -69,7 +71,7 @@ const StepChooseType = () => {
                         setValue("donationType", "specific");
                     }}
                 >
-                    Prispejte konkrétnemu útulku
+                    {t("chooseType.specific")}
                 </Button>
                 <Button
                     type="button"
@@ -81,17 +83,19 @@ const StepChooseType = () => {
                         setValue("shelterId", "");
                     }}
                 >
-                    Prispejte celej nadácii
+                    {t("chooseType.foundation")}
                 </Button>
             </div>
 
             <div className="space-y-3">
-                <p className="text-sm font-semibold text-foreground">O projekte</p>
+                <p className="text-sm font-semibold text-foreground">
+                    {t("chooseType.aboutProject")}
+                </p>
                 <div className="space-y-2">
                     <Label className="text-xs text-muted-foreground">
                         {donationType === "specific"
-                            ? "Útulok (povinné)"
-                            : "Útulok (nepovinné)"}
+                            ? t("chooseType.shelterRequired")
+                            : t("chooseType.shelterOptional")}
                     </Label>
                     <Controller
                         control={control}
@@ -106,12 +110,12 @@ const StepChooseType = () => {
                                 disabled={donationType === "foundation"}
                             >
                                 <SelectTrigger className="w-full bg-gray-500/10">
-                                    <SelectValue placeholder="Vyberte útulok zo zoznamu" />
+                                    <SelectValue placeholder={t("chooseType.shelterPlaceholder")} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {isLoading && (
                                         <SelectItem value="loading" disabled>
-                                            Načítavam...
+                                            {t("chooseType.loading")}
                                         </SelectItem>
                                     )}
                                     {data?.shelters.map((shelter) => (
@@ -129,7 +133,7 @@ const StepChooseType = () => {
 
             <div className="space-y-3 py-6">
                 <p className="text-sm font-semibold text-foreground">
-                    Suma, ktorou chcem prispieť
+                    {t("chooseType.amountTitle")}
                 </p>
                 <div className="flex justify-center items-center py-4">
                     <div className="relative">
@@ -185,7 +189,7 @@ const StepChooseType = () => {
                     className="flex items-center justify-between rounded-lg border-destructive/60 bg-destructive/10"
                 >
                     <AlertDescription>
-                        Prosím, zadajte sumu vyššiu ako 0 €.
+                        {t("chooseType.amountError")}
                     </AlertDescription>
                     <AlertTriangle className="h-5 w-5 text-destructive" />
                 </Alert>
@@ -197,7 +201,7 @@ const StepChooseType = () => {
                     className="flex items-center justify-between rounded-lg border-destructive/60 bg-destructive/10"
                 >
                     <AlertDescription>
-                        Prosím, vyberte útulok.
+                        {t("chooseType.shelterError")}
                     </AlertDescription>
                     <AlertTriangle className="h-5 w-5 text-destructive" />
                 </Alert>

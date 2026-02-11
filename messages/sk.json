@@ -1,6 +1,104 @@
 {
+    "Common": {
+        "back": "Späť"
+    },
     "Footer": {
         "about": "O projekte",
-        "contact": "Kontakt"
+        "contact": "Kontakt",
+        "brand": "Good boy",
+        "brandAlt": "Good boy logo",
+        "facebookLabel": "Facebook",
+        "instagramLabel": "Instagram"
+    },
+    "Donate": {
+        "stepper": {
+            "chooseShelter": "Výber útulku",
+            "personalInfo": "Osobné údaje",
+            "confirm": "Potvrdenie"
+        },
+        "navigation": {
+            "back": "Späť",
+            "next": "Pokračovať",
+            "submit": "Odoslať formulár"
+        },
+        "chooseType": {
+            "title": "Vyberte si možnosť, ako chcete pomôcť",
+            "specific": "Prispejte konkrétnemu útulku",
+            "foundation": "Prispejte celej nadácii",
+            "aboutProject": "O projekte",
+            "shelterRequired": "Útulok (povinné)",
+            "shelterOptional": "Útulok (nepovinné)",
+            "shelterPlaceholder": "Vyberte útulok zo zoznamu",
+            "loading": "Načítavam...",
+            "amountTitle": "Suma, ktorou chcem prispieť",
+            "amountError": "Prosím, zadajte sumu vyššiu ako 0 €.",
+            "shelterError": "Prosím, vyberte útulok."
+        },
+        "personalInfo": {
+            "title": "Potrebujeme od Vás zopár informácií",
+            "firstName": "Meno",
+            "firstNamePlaceholder": "Zadajte Vaše meno",
+            "lastName": "Priezvisko",
+            "lastNamePlaceholder": "Zadajte Vaše priezvisko",
+            "email": "E-mail",
+            "emailPlaceholder": "Zadajte Váš e-mail",
+            "phone": "Telefónne číslo",
+            "phonePlaceholder": "Zadajte číslo",
+            "consent": "Súhlasím so spracovaním osobných údajov podľa podmienok nadácie.",
+            "countrySkAlt": "Slovensko",
+            "countryCzAlt": "Česko"
+        },
+        "confirm": {
+            "title": "Skontrolujte si zadané údaje",
+            "incompleteTitle": "Formulár nie je kompletný",
+            "incompleteDescription": "Skontrolujte priezvisko, e-mail, telefón, súhlas a sumu príspevku.",
+            "summary": "Zhrnutie",
+            "helpType": "Forma pomoci",
+            "helpTypeFoundation": "Finančný príspevok celej nadácii",
+            "helpTypeSpecific": "Finančný príspevok konkrétnemu útulku",
+            "shelter": "Útulok",
+            "amount": "Suma príspevku",
+            "personalTitle": "Meno a priezvisko",
+            "nameLabel": "Meno a priezvisko",
+            "emailLabel": "E-mail",
+            "phoneLabel": "Telefónne číslo",
+            "consent": "Súhlasím so spracovaním mojich osobných údajov",
+            "successTitle": "Ďakujeme!",
+            "errorTitle": "Odoslanie zlyhalo",
+            "successFallback": "Príspevok bol úspešne odoslaný.",
+            "errorFallback": "Odoslanie sa nepodarilo. Skúste to prosím znova.",
+            "checkErrors": "Prosím, skontrolujte povinné údaje a sumu príspevku.",
+            "consentError": "Prosím, potvrďte súhlas so spracovaním osobných údajov."
+        }
+    },
+    "Validation": {
+        "firstNameInvalid": "Meno musí mať 2–20 znakov alebo zostať prázdne.",
+        "firstNameLettersOnly": "Meno môže obsahovať iba písmená.",
+        "lastNameInvalid": "Priezvisko musí mať 2–30 znakov.",
+        "lastNameLettersOnly": "Priezvisko môže obsahovať iba písmená.",
+        "emailInvalid": "Prosím, zadajte platný e-mail.",
+        "phoneInvalid": "Telefónne číslo musí mať 9 číslic.",
+        "consentRequired": "Prosím, potvrďte súhlas so spracovaním údajov.",
+        "amountRequired": "Zadajte sumu príspevku."
+    },
+    "Contact": {
+        "title": "Kontakt",
+        "emailTitle": "Email",
+        "emailDescription": "Náš tím Vám rád pomôže.",
+        "emailAddress": "hello@goodrequest.com",
+        "officeTitle": "Kancelária",
+        "officeDescription": "Radi Vás privítame v našej centrále.",
+        "officeAddress": "Obchodná 3D, 010 08 Žilina, Slovensko",
+        "phoneTitle": "Telefón",
+        "phoneDescription": "Po–Pia od 8:00 do 17:00.",
+        "phoneNumber": "+421 911 750 750",
+        "imageAlt": "Kontakt Good boy"
+    },
+    "Projects": {
+        "title": "O projekte",
+        "intro": "Nadácia Good Boy sa venuje zlepšovaniu života psov v útulkoch na Slovensku. Zameriava sa na zdravotnú starostlivosť, adopcie, dočasnú starostlivosť, a podporu zodpovedného vlastníctva zvierat prostredníctvom vzdelávania a komunitných programov.",
+        "totalContribution": "Celková vyzbieraná hodnota",
+        "contributors": "Počet darcov",
+        "outro": "Naša práca je možná vďaka podpore jednotlivcov, firiem a komunity. Organizujeme kampaňe, zbierky a aktivity, ktoré pomáhajú útulkom zabezpečiť lepšie podmienky pre zvieratá a zvýšiť šance na adopciu."
     }
 }

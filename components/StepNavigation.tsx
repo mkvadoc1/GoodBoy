@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useDonationStore } from "@/lib/donationStore";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
+import { useTranslations } from "next-intl";
 
 type StepNavigationProps = {
   onNext?: () => void;
@@ -19,11 +20,14 @@ const StepNavigation = ({
   backDisabled,
   nextDisabled,
   nextLabel,
-  backLabel = "Späť",
+  backLabel,
 }: StepNavigationProps) => {
+  const t = useTranslations("Donate");
   const { step, nextStep, prevStep, stepValid, setShowErrors, submitAction } = useDonationStore();
   const handleBack = onBack ?? prevStep;
-  const defaultNextLabel = step === 2 ? "Odoslať formulár" : "Pokračovať";
+  const defaultNextLabel =
+    step === 2 ? t("navigation.submit") : t("navigation.next");
+  const resolvedBackLabel = backLabel ?? t("navigation.back");
   const handleNext = onNext ?? (() => {
     if (step === 2) {
       submitAction?.();
@@ -45,7 +49,7 @@ const StepNavigation = ({
     <div className="flex items-center justify-between pt-2">
       <Button variant="secondary" size="lg" disabled={isBackDisabled} onClick={handleBack}>
         <FaArrowLeft />
-        {backLabel}
+        {resolvedBackLabel}
       </Button>
       <Button size="lg" onClick={handleNext} disabled={isNextDisabled}>
         {nextLabel ?? defaultNextLabel}
